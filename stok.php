@@ -6,7 +6,7 @@ include('fungsi.php');
 if (isset($_POST['edit'])) {
     $id = $_POST['id'];
 
-    header('Location: edit.php?jenis=stok&id=' . $id);
+    header('Location: editStok.php?id=' . $id);
     exit();
 }
 

@@ -1,50 +1,59 @@
 <?php
-	include('config.php');
-	include('fungsi.php');
+include('config.php');
+include('fungsi.php');
 
-	// mendapatkan data edit
-	if(isset($_GET['jenis']) && isset($_GET['id'])) {
-		$id 	= $_GET['id'];
-		$jenis	= $_GET['jenis'];
+// mendapatkan data edit
+if (isset($_GET['id'])) {
+	$id = $_GET['id'];
 
-		// hapus record
-		$query 	= "SELECT nama FROM $jenis WHERE id=$id";
-		$result	= mysqli_query($koneksi, $query);
-		
-		while ($row = mysqli_fetch_array($result)) {
-			$nama = $row['nama'];
-		}
+	// hapus record
+	$query 	= "SELECT nama, qty, restock_point FROM stok WHERE id=$id";
+	$result	= mysqli_query($koneksi, $query);
+
+	while ($row = mysqli_fetch_array($result)) {
+		$nama = $row['nama'];
+		$qty = $row['qty'];
+		$restock_point = $row['restock_point'];
 	}
+}
 
-	if (isset($_POST['update'])) {
-		$id 	= $_POST['id'];
-		$jenis	= $_POST['jenis'];
-		$nama 	= $_POST['nama'];
+if (isset($_POST['update'])) {
+	$id = $_POST['id'];
+	$nama = $_POST['nama'];
+	$qty = $_POST['qty'];
+	$restock_point = $_POST['restock_point'];
 
-		$query 	= "UPDATE $jenis SET nama='$nama' WHERE id=$id";
-		$result	= mysqli_query($koneksi, $query);
+	$query 	= "UPDATE stok SET nama='$nama', qty='$qty', restock_point='$restock_point' WHERE id=$id";
+	$result	= mysqli_query($koneksi, $query);
 
-		if (!$result) {
-			echo "Update gagal";
-			exit();
-		} else {
-			header('Location: '.$jenis.'.php');
-			exit();
-		}
+	if (!$result) {
+		echo "Update gagal";
+		exit();
+	} else {
+		header('Location: stok.php');
+		exit();
 	}
+}
 
-	include('header.php');
+include('header.php');
 ?>
 
 <section class="content">
-	<h2>Edit <?php echo $jenis?></h2>
+	<h2>Edit Stok</h2>
 
-	<form class="ui form" method="post" action="edit.php">
-		<div class="inline field">
-			<label>Nama <?php echo $jenis ?></label>
-			<input type="text" name="nama" value="<?php echo $nama?>">
-			<input type="hidden" name="id" value="<?php echo $id?>">
-			<input type="hidden" name="jenis" value="<?php echo $jenis?>">
+	<form class="ui form" method="post" action="editStok.php">
+		<input type="hidden" name="id" value="<?php echo $id ?>">
+		<div class="field">
+			<label>Nama Barang</label>
+			<input type="text" name="nama" value="<?php echo $nama ?>">
+		</div>
+		<div class="three wide field">
+			<label>Qty</label>
+			<input type="number" name="qty" value="<?php echo $qty ?>">
+		</div>
+		<div class="three wide field">
+			<label>Restock Point</label>
+			<input type="number" name="restock_point" value="<?php echo $restock_point ?>">
 		</div>
 		<br>
 		<input class="ui green button" type="submit" name="update" value="UPDATE">
