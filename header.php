@@ -17,6 +17,7 @@
 	<nav id="navigation" role="navigation">
 		<ul>
 			<li><a class="item" href="home.php">Home</a></li>
+			<li><a class="item" href="stok.php">Stok</a></li>
 			<li>
 				<a class="item" href="kriteria.php">Kriteria
 					<div class="ui blue tiny label" style="float: right;"><?php echo getJumlahKriteria(); ?></div>

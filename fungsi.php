@@ -115,6 +115,18 @@ function tambahData($tabel,$nama) {
 	}
 }
 
+function tambahStok($nama, $qty, $restock_point) {
+	include('config.php');
+
+	$query 	= "INSERT INTO stok (nama, qty, restock_point) VALUES ('$nama', '$qty', '$restock_point')";
+	$tambah	= mysqli_query($koneksi, $query);
+
+	if (!$tambah) {
+		echo "Gagal mmenambah data stok";
+		exit();
+	}
+}
+
 // hapus kriteria
 function deleteKriteria($id) {
 	include('config.php');
