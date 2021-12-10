@@ -127,6 +127,14 @@ function tambahStok($nama, $qty, $restock_point) {
 	}
 }
 
+function deleteStok($id) {
+	include('config.php');
+
+	// hapus record dari tabel stok
+	$query 	= "DELETE FROM stok WHERE id=$id";
+	mysqli_query($koneksi, $query);
+}
+
 // hapus kriteria
 function deleteKriteria($id) {
 	include('config.php');
