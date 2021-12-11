@@ -6,8 +6,9 @@ if (isset($_POST['tambah'])) {
 	$nama = $_POST['nama'];
 	$qty = $_POST['qty'];
 	$restock_point = $_POST['restock_point'];
+	$harga = $_POST['harga'];
 
-	tambahStok($nama, $qty, $restock_point);
+	tambahStok($nama, $qty, $restock_point, $harga);
 
 	header('Location: stok.php');
 }
@@ -25,11 +26,15 @@ include('header.php');
 		</div>
 		<div class="three wide field">
 			<label for="qty">Qty</label>
-			<input type="number" name="qty" id="qty">
+			<input type="number" min="0" name="qty" id="qty">
 		</div>
 		<div class="three wide field">
 			<label for="restock_point">Restock Point</label>
-			<input type="number" name="restock_point" id="restock_point">
+			<input type="number" min="0" name="restock_point" id="restock_point">
+		</div>
+		<div class="three wide field">
+			<label for="harga">Harga (Rp)</label>
+			<input type="number" name="harga" id="harga" min="0">
 		</div>
 		<input type="hidden" name="jenis" value="stok">
 		<br>

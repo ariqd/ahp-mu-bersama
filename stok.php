@@ -33,7 +33,18 @@ include('header.php');
 ?>
 
 <section class="content">
-    <h2 class="ui header">Stok</h2>
+    <div class="ui grid">
+        <div class="two wide column">
+            <h2 class="ui header">Stok</h2>
+        </div>
+        <div class="two wide right floated column">
+            <a href="tambahStok.php">
+                <div class="ui right floated small primary labeled icon button">
+                    <i class="plus icon"></i>Tambah
+                </div>
+            </a>
+        </div>
+    </div>
 
     <table class="ui celled table">
         <thead>
@@ -42,6 +53,7 @@ include('header.php');
                 <th>Nama Barang</th>
                 <th>Qty</th>
                 <th>Restock Point</th>
+                <th>Harga</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -49,7 +61,7 @@ include('header.php');
 
             <?php
             // Menampilkan list stok
-            $query = "SELECT id,nama,qty,restock_point FROM stok ORDER BY id";
+            $query = "SELECT id,nama,qty,restock_point,harga FROM stok ORDER BY id";
             $result = mysqli_query($koneksi, $query);
             $i = 0;
             while ($row = mysqli_fetch_array($result)) {
@@ -60,9 +72,11 @@ include('header.php');
                     <td><?php echo $row['nama'] ?></td>
                     <td><?php echo $row['qty'] ?> pcs</td>
                     <td><?php echo $row['restock_point'] ?> pcs</td>
+                    <td>Rp <?php echo number_format($row['harga'], 0, ',', '.') ?></td>
                     <td class="right aligned collapsing">
                         <form method="post" action="stok.php">
                             <input type="hidden" name="id" value="<?php echo $row['id'] ?>">
+                            <button type="submit" name="addToCart" class="ui mini orange left labeled icon button"><i class="right plus icon"></i>ADD TO CART</button>
                             <button type="submit" name="restock" class="ui mini green left labeled icon button"><i class="right plus icon"></i>RESTOCK</button>
                             <button type="submit" name="edit" class="ui mini teal left labeled icon button"><i class="right edit icon"></i>EDIT</button>
                             <!-- <button type="submit" name="delete" class="ui mini red left labeled icon button"><i class="right remove icon"></i>DELETE</button> -->
@@ -71,27 +85,16 @@ include('header.php');
                 </tr>
             <?php } ?>
         </tbody>
-        <tfoot class="full-width">
-            <tr>
-                <th colspan="5">
-                    <a href="tambahStok.php">
-                        <div class="ui right floated small primary labeled icon button">
-                            <i class="plus icon"></i>Tambah
-                        </div>
-                    </a>
-                </th>
-            </tr>
-        </tfoot>
     </table>
 
-    <br>
+    <!-- <br> -->
 
-    <form action="alternatif.php">
+    <!-- <form action="alternatif.php">
         <button class="ui right labeled icon button" style="float: right;">
             <i class="right arrow icon"></i>
             Lanjut
         </button>
-    </form>
+    </form> -->
 
 </section>
 

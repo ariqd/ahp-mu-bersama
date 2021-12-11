@@ -7,13 +7,14 @@ if (isset($_GET['id'])) {
 	$id = $_GET['id'];
 
 	// hapus record
-	$query 	= "SELECT nama, qty, restock_point FROM stok WHERE id=$id";
+	$query 	= "SELECT nama, qty, restock_point, harga FROM stok WHERE id=$id";
 	$result	= mysqli_query($koneksi, $query);
 
 	while ($row = mysqli_fetch_array($result)) {
 		$nama = $row['nama'];
 		$qty = $row['qty'];
 		$restock_point = $row['restock_point'];
+		$harga = $row['harga'];
 	}
 }
 
@@ -22,8 +23,9 @@ if (isset($_POST['update'])) {
 	$nama = $_POST['nama'];
 	$qty = $_POST['qty'];
 	$restock_point = $_POST['restock_point'];
+	$harga = $_POST['harga'];
 
-	$query 	= "UPDATE stok SET nama='$nama', qty='$qty', restock_point='$restock_point' WHERE id=$id";
+	$query 	= "UPDATE stok SET nama='$nama', qty='$qty', restock_point='$restock_point', harga='$harga' WHERE id=$id";
 	$result	= mysqli_query($koneksi, $query);
 
 	if (!$result) {
@@ -54,6 +56,10 @@ include('header.php');
 		<div class="three wide field">
 			<label>Restock Point</label>
 			<input type="number" name="restock_point" value="<?php echo $restock_point ?>">
+		</div>
+		<div class="three wide field">
+			<label>Harga (Rp)</label>
+			<input type="number" name="harga" value="<?php echo $harga ?>">
 		</div>
 		<br>
 		<input class="ui green button" type="submit" name="update" value="UPDATE">

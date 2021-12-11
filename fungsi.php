@@ -115,10 +115,10 @@ function tambahData($tabel,$nama) {
 	}
 }
 
-function tambahStok($nama, $qty, $restock_point) {
+function tambahStok($nama, $qty, $restock_point, $harga) {
 	include('config.php');
 
-	$query 	= "INSERT INTO stok (nama, qty, restock_point) VALUES ('$nama', '$qty', '$restock_point')";
+	$query 	= "INSERT INTO stok (nama, qty, restock_point, harga) VALUES ('$nama', '$qty', '$restock_point', $harga)";
 	$tambah	= mysqli_query($koneksi, $query);
 
 	if (!$tambah) {
