@@ -2,6 +2,13 @@
 include('config.php');
 include('fungsi.php');
 
+if (isset($_POST['restock'])) {
+    $id = $_POST['id'];
+
+    header('Location: bobot_kriteria.php');
+    exit();
+}
+
 // menjalankan perintah edit
 if (isset($_POST['edit'])) {
     $id = $_POST['id'];
@@ -56,8 +63,9 @@ include('header.php');
                     <td class="right aligned collapsing">
                         <form method="post" action="stok.php">
                             <input type="hidden" name="id" value="<?php echo $row['id'] ?>">
+                            <button type="submit" name="restock" class="ui mini green left labeled icon button"><i class="right plus icon"></i>RESTOCK</button>
                             <button type="submit" name="edit" class="ui mini teal left labeled icon button"><i class="right edit icon"></i>EDIT</button>
-                            <button type="submit" name="delete" class="ui mini red left labeled icon button"><i class="right remove icon"></i>DELETE</button>
+                            <!-- <button type="submit" name="delete" class="ui mini red left labeled icon button"><i class="right remove icon"></i>DELETE</button> -->
                         </form>
                     </td>
                 </tr>

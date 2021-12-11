@@ -1,7 +1,7 @@
 </div> <!-- /wrapper -->
 
 <footer>
-	<p>Toko MU Bersama <br> <?php echo date("d-M-Y"); ?></p>
+	<p>Toko Mutiara Indah <br> <?php echo date("d-M-Y"); ?></p>
 </footer>
 
 <script src="js/jquery-3.2.1.js"></script>
