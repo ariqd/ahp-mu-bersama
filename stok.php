@@ -74,12 +74,11 @@ include('header.php');
                 <th>Nama Barang</th>
                 <th>Qty</th>
                 <th>Restock Point</th>
-                <th>Harga</th>
+                <th class="right aligned">Harga</th>
                 <th>Action</th>
             </tr>
         </thead>
         <tbody>
-
             <?php
             // Menampilkan list stok
             $query = "SELECT id,nama,qty,restock_point,harga FROM stok ORDER BY id";
@@ -93,7 +92,7 @@ include('header.php');
                     <td><?php echo $row['nama'] ?></td>
                     <td><?php echo $row['qty'] ?> pcs</td>
                     <td><?php echo $row['restock_point'] ?> pcs</td>
-                    <td>Rp <?php echo number_format($row['harga'], 0, ',', '.') ?></td>
+                    <td class="right aligned">Rp <?php echo number_format($row['harga'], 0, ',', '.') ?></td>
                     <td class="right aligned collapsing">
                         <form method="post" action="stok.php">
                             <input type="hidden" name="id" value="<?php echo $row['id'] ?>">
