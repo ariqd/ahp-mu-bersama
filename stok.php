@@ -1,5 +1,5 @@
 <?php
-session_start();
+// session_start();
 include('config.php');
 include('fungsi.php');
 
@@ -8,7 +8,7 @@ if (isset($_POST['addToCart'])) {
 
     addToCart($id);
 
-    $_SESSION['message'] = "Barang berhasil ditambahkan ke Keranjang";
+    // $_SESSION['message'] = "Barang berhasil ditambahkan ke Keranjang";
     // header('Location: stok.php');
 }
 
@@ -66,6 +66,18 @@ include('header.php');
         </div>
     <?php endif; ?>
     <?php unset($_SESSION['message']); ?>
+
+
+    <?php if (isset($_SESSION['message_warning'])) : ?>
+        <div class="ui negative message">
+            <i class="close icon"></i>
+            <div class="header">
+                Failed!
+            </div>
+            <?php echo $_SESSION['message_warning']; ?>
+        </div>
+    <?php endif; ?>
+    <?php unset($_SESSION['message_warning']); ?>
 
     <table class="ui celled table">
         <thead>

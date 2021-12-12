@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 function d($data)
 {
@@ -195,21 +196,34 @@ function tambahStok($nama, $qty, $restock_point, $harga)
 
 function addToCart($id)
 {
+	// $id == id stok
 	include('config.php');
 
+	// Get data stok
+	$queryStok = "SELECT nama, qty, restock_point FROM stok WHERE id=$id LIMIT 1";
+	$resultStok = mysqli_query($koneksi, $queryStok);
+	$stok = mysqli_fetch_assoc($resultStok);
+
+	// Check if stok exist
 	$result = mysqli_query($koneksi, "SELECT stok_id, qty FROM cart WHERE stok_id='$id' LIMIT 1");
 	$row = mysqli_fetch_assoc($result);
-	// echo $row['qty'];
 
 	if ($row) {
 		// Update Stok
-		$newQty = $row['qty'] + 1;
-		$query = "UPDATE cart SET qty=$newQty WHERE id=$id";
-		$update	= mysqli_query($koneksi, $query);
+		// Check if stok habis
+		if ($row['qty'] >= $stok['qty']) {
+			$_SESSION['message_warning'] = "Qty " . $stok['nama'] . " telah mencapai batas maksimum";
+		} else {
+			$newQty = $row['qty'] + 1;
+			$query = "UPDATE cart SET qty=$newQty WHERE stok_id=$id";
+			$update	= mysqli_query($koneksi, $query);
 
-		if (!$update) {
-			echo "Gagal update data cart";
-			exit();
+			if (!$update) {
+				echo "Gagal update data cart";
+				exit();
+			}
+
+			$_SESSION['message'] = "Qty " . $stok['nama'] . " berhasil ditambahkan";
 		}
 	} else {
 		// Tambah Stok
@@ -220,6 +234,8 @@ function addToCart($id)
 			echo "Gagal mmenambah data cart";
 			exit();
 		}
+
+		$_SESSION['message'] =  $stok['nama'] . " berhasil ditambahkan ke Keranjang";
 	}
 }
 
@@ -230,6 +246,17 @@ function deleteStok($id)
 	// hapus record dari tabel stok
 	$query 	= "DELETE FROM stok WHERE id=$id";
 	mysqli_query($koneksi, $query);
+}
+
+function deleteFromCart($id)
+{
+	include('config.php');
+
+	// hapus record dari tabel cart
+	$query 	= "DELETE FROM cart WHERE id=$id";
+	mysqli_query($koneksi, $query);
+
+	$_SESSION['message'] =  "barang berhasil dihapus dari Keranjang";
 }
 
 // hapus kriteria
