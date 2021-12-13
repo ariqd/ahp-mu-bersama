@@ -8,6 +8,17 @@ if (isset($_POST['checkout'])) {
     // Clear cart table
 }
 
+if (isset($_POST['updatedQty'])) {
+    $id = $_POST['id']; // CART ID
+    $stok_id = $_POST['stok_id']; // STOK ID
+    $updated_qty = $_POST['updatedQty']; // NEW QTY
+    // $previous_qty = $_POST['previous_qty']; // NEW QTY
+
+    // echo $id;
+
+    updateCart($id, $stok_id, $updated_qty);
+}
+
 if (isset($_POST['delete'])) {
     $id = $_POST['id'];  // CART ID
 
@@ -34,6 +45,17 @@ include('header.php');
         </div>
     <?php endif; ?>
     <?php unset($_SESSION['message']); ?>
+
+    <?php if (isset($_SESSION['message_warning'])) : ?>
+        <div class="ui negative message">
+            <i class="close icon"></i>
+            <div class="header">
+                Failed!
+            </div>
+            <?php echo $_SESSION['message_warning']; ?>
+        </div>
+    <?php endif; ?>
+    <?php unset($_SESSION['message_warning']); ?>
 
     <table class="ui celled table">
         <thead>
@@ -65,10 +87,14 @@ include('header.php');
                     <td><?php echo $i ?></td>
                     <td><?php echo $stok['nama'] ?></td>
                     <td>
-                        <div class="ui transparent input" style="border-bottom: 1px solid #eee;padding-bottom: 5px;">
-                            <input type="number" placeholder="Qty" value="<?php echo $cart['qty'] ?>" style="width: 70px;text-align:center;">
-                        </div>
-                        &nbsp;pcs
+                        <form method="post" action="cart.php" id="updateQtyForm">
+                            <div class="ui transparent input" style="border-bottom: 1px solid #eee;padding-bottom: 5px;">
+                                <input type="hidden" name="id" value="<?php echo $cart['id'] ?>">
+                                <input type="hidden" name="stok_id" value="<?php echo $stok['id'] ?>">
+                                <input type="number" placeholder="Qty" value="<?php echo $cart['qty'] ?>" style="width: 70px;text-align:center;" name="updatedQty" id="updateQty<?php echo $cart['id'] ?>">
+                            </div>
+                            &nbsp;pcs
+                        </form>
                     </td>
                     <td class="right aligned">Rp <?php echo number_format($stok['harga'], 0, ',', '.') ?></td>
                     <td class="right aligned">Rp <?php echo number_format($subtotal, 0, ',', '.') ?></td>
@@ -136,6 +162,19 @@ include('header.php');
         });
         $(".checkout").modal({
             closable: true
+        });
+    });
+</script>
+
+<script>
+    if (window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+    }
+
+    $(document).ready(function() {
+        $('[id^=updateQty]').change(function() {
+            // $('#select_date').click();
+            this.form.submit();
         });
     });
 </script>

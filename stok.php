@@ -7,9 +7,6 @@ if (isset($_POST['addToCart'])) {
     $id = $_POST['id'];
 
     addToCart($id);
-
-    // $_SESSION['message'] = "Barang berhasil ditambahkan ke Keranjang";
-    // header('Location: stok.php');
 }
 
 if (isset($_POST['restock'])) {
@@ -66,7 +63,6 @@ include('header.php');
         </div>
     <?php endif; ?>
     <?php unset($_SESSION['message']); ?>
-
 
     <?php if (isset($_SESSION['message_warning'])) : ?>
         <div class="ui negative message">

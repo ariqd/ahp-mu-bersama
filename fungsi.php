@@ -239,6 +239,35 @@ function addToCart($id)
 	}
 }
 
+function updateCart($cart_id, $stok_id, $updated_qty)
+{
+	include('config.php');
+
+	$queryStok = "SELECT nama, qty FROM stok WHERE id=$stok_id LIMIT 1";
+	$resultStok = mysqli_query($koneksi, $queryStok);
+	$stok = mysqli_fetch_assoc($resultStok);
+
+	if ($updated_qty >= $stok['qty']) {
+		$_SESSION['message_warning'] = "Qty baru " . $stok['nama'] . " melebihi batas maksimum";
+	} else if ($updated_qty <= 0) {
+		// Delete from cart
+		$query 	= "DELETE FROM cart WHERE id=$cart_id";
+		mysqli_query($koneksi, $query);
+
+		$_SESSION['message'] =  $stok['nama'] . " berhasil dihapus dari Keranjang";
+	} else {
+		$query = "UPDATE cart SET qty=$updated_qty WHERE id=$cart_id";
+		$update	= mysqli_query($koneksi, $query);
+
+		if (!$update) {
+			echo "Gagal update data cart";
+			exit();
+		}
+
+		$_SESSION['message'] = "Qty " . $stok['nama'] . " berhasil di-update";
+	}
+}
+
 function deleteStok($id)
 {
 	include('config.php');

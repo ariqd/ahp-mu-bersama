@@ -16,7 +16,7 @@
 	<div class="wrapper">
 		<nav id="navigation" role="navigation">
 			<ul>
-				<li><a class="item" href="home.php">Home</a></li>
+				<!-- <li><a class="item" href="home.php">Home</a></li> -->
 				<li><a class="item" href="stok.php">Stok</a></li>
 				<li>
 					<a class="item" href="cart.php">Keranjang
