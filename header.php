@@ -4,9 +4,9 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Sistem Pendukung Keputusan Pemilihan Vendor</title>
-	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
 	<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 
 <body>

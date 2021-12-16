@@ -41,10 +41,13 @@ include('header.php');
 
 <section class="content">
     <div class="ui grid">
-        <div class="three wide column">
-            <h2 class="ui header">Stok</h2>
+        <div class="four wide column">
+            <div style="display: flex; align-items:baseline">
+                <h2 class="ui header">Stok</h2>
+                <div id="orange" style="margin-left: 20px;"></div>&nbsp;Perlu Restock
+            </div>
         </div>
-        <div class="thirteen wide column">
+        <div class="twelve wide column">
             <form action="stok.php" class="right floated ui form">
                 <div class="inline fields">
                     <div class="field">
@@ -126,7 +129,7 @@ include('header.php');
                 $kategori = mysqli_fetch_assoc($resultKategori);
                 $i++;
             ?>
-                <tr>
+                <tr style="background-color: <?php echo $row['qty'] < $row['restock_point'] ? '#FFE57F' : 'none' ?>">
                     <td><?php echo $i ?></td>
                     <td><?php echo $row['nama'] ?></td>
                     <td><?php echo $kategori['nama'] ?></td>
