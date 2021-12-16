@@ -6,6 +6,7 @@
 	<title>Sistem Pendukung Keputusan Pemilihan Vendor</title>
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
+	<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
 </head>
 
 <body>
@@ -20,9 +21,12 @@
 				<li><a class="item" href="stok.php">Stok</a></li>
 				<li>
 					<a class="item" href="cart.php">Keranjang
-						<div class="ui blue tiny label" style="float: right;"><?php echo getJumlahCart(); ?></div>
+						<?php if (getJumlahCart() > 0) : ?>
+							<div class="ui blue tiny label" style="float: right;"><?php echo getJumlahCart() ?></div>
+						<?php endif; ?>
 					</a>
 				</li>
+				<li><a class="item" href="orders.php">Pesanan</a></li>
 				<li>
 					<a class="item" href="kriteria.php">Kriteria
 						<div class="ui blue tiny label" style="float: right;"><?php echo getJumlahKriteria(); ?></div>
@@ -31,6 +35,11 @@
 				<li>
 					<a class="item" href="alternatif.php">Alternatif
 						<div class="ui blue tiny label" style="float: right;"><?php echo getJumlahAlternatif(); ?></div>
+					</a>
+				</li>
+				<li>
+					<a class="item" href="kategori.php">Kategori
+						<div class="ui blue tiny label" style="float: right;"><?php echo getJumlahKategori(); ?></div>
 					</a>
 				</li>
 				<!-- <li><a class="item" href="bobot_kriteria.php">Perbandingan Kriteria</a></li>

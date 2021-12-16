@@ -3,9 +3,74 @@ include('config.php');
 include('fungsi.php');
 
 if (isset($_POST['checkout'])) {
-    // Save to orders & order details table
-    // Decrease qty according to qty sold
+    // Save to orders table
+    $query_sum_qty = "SELECT sum(qty) FROM cart";
+    $result_sum_qty = mysqli_query($koneksi, $query_sum_qty);
+    while ($row_sum_qty = mysqli_fetch_array($result_sum_qty)) {
+        $qty = $row_sum_qty[0];
+    }
+
+    $total = $_POST['total'];
+    $created_at = date('Y-m-d H:i:s');
+
+    $query_insert_orders = "INSERT INTO orders (qty, total, created_at) VALUES ('$qty', '$total', '$created_at')";
+    $insert_orders = mysqli_query($koneksi, $query_insert_orders);
+
+    if (!$insert_orders) {
+        echo "Gagal mmenambah data orders";
+        exit();
+    }
+
+    // Save to order details table
+    $order_id = mysqli_insert_id($koneksi);
+
+    $query_cart = "SELECT id,stok_id,qty FROM cart ORDER BY id";
+    $result_cart = mysqli_query($koneksi, $query_cart);
+    $i = 0;
+    $total = 0;
+    while ($cart = mysqli_fetch_array($result_cart)) {
+        $stok_id = $cart['stok_id'];
+        $qty_beli = $cart['qty'];
+
+        $query_stok = "SELECT nama, harga, qty, kategori_id FROM stok WHERE id=$stok_id LIMIT 1";
+        $result_stok = mysqli_query($koneksi, $query_stok);
+        $stok = mysqli_fetch_assoc($result_stok);
+        $nama = $stok['nama'];
+        $harga = $stok['harga'];
+        $qty_now = $stok['qty'];
+        $kategori_id = $stok['kategori_id'];
+
+        // Insert into order details table
+        $query_order_details = "INSERT INTO order_details (order_id, stok_id, nama, qty_beli, harga, kategori_id) VALUES ('$order_id', '$stok_id', '$nama', '$qty_beli', '$harga', '$kategori_id')";
+        $insert_order_details = mysqli_query($koneksi, $query_order_details);
+
+        if (!$insert_order_details) {
+            echo "Gagal mmenambah data order details";
+            exit();
+        }
+
+        // Decrease qty according to qty sold
+        $updated_qty = $qty_now - $qty_beli;
+        $query_update_stok = "UPDATE stok SET qty=$updated_qty WHERE id=$stok_id";
+        $update_stok = mysqli_query($koneksi, $query_update_stok);
+
+        if (!$update_stok) {
+            echo "Gagal update data cart";
+            exit();
+        }
+    }
+
     // Clear cart table
+    $query_truncate_cart = "TRUNCATE TABLE cart";
+    $truncate_cart = mysqli_query($koneksi, $query_truncate_cart);
+
+    if (!$truncate_cart) {
+        echo "Gagal TRUNCATE cart";
+        exit();
+    }
+
+    // Redirect to orders page
+    header('Location: stok.php');
 }
 
 if (isset($_POST['updatedQty'])) {
@@ -127,33 +192,36 @@ include('header.php');
         Checkout
     </button>
 
+    <div class="ui small modal checkout">
+        <i class="close icon"></i>
+        <div class="header">
+            Konfirmasi Pesanan
+        </div>
+        <div class="image content">
+            <div class="description">
+                <div class="ui header">Stok akan dikurangi sesuai pesanan</div>
+                <p>Yakin akan melanjutkan?</p>
+            </div>
+        </div>
+        <div class="actions">
+            <form action="cart.php" method="POST">
+                <div class="ui black deny button">
+                    Tidak
+                </div>
+                <input type="hidden" value="<?php echo $total ?>" name="total">
+                <button class="ui positive right labeled icon button" name="checkout">
+                    Ya, Selesaikan Pesanan
+                    <i class="checkmark icon"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
 </section>
 
 <?php include('footer.php'); ?>
 
-<div class="ui small modal checkout">
-    <i class="close icon"></i>
-    <div class="header">
-        Konfirmasi Pesanan
-    </div>
-    <div class="image content">
-        <div class="description">
-            <div class="ui header">Stok akan dikurangi sesuai pesanan</div>
-            <p>Yakin akan melanjutkan?</p>
-        </div>
-    </div>
-    <div class="actions">
-        <form action="cart.php">
-            <div class="ui black deny button">
-                Tidak
-            </div>
-            <button class="ui positive right labeled icon button" name="checkout">
-                Ya, Selesaikan Pesanan
-                <i class="checkmark icon"></i>
-            </button>
-        </form>
-    </div>
-</div>
+
 
 <script>
     $(function() {

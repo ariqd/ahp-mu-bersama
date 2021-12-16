@@ -41,15 +41,36 @@ include('header.php');
 
 <section class="content">
     <div class="ui grid">
-        <div class="two wide column">
+        <div class="three wide column">
             <h2 class="ui header">Stok</h2>
         </div>
-        <div class="two wide right floated column">
-            <a href="tambahStok.php">
-                <div class="ui right floated small primary labeled icon button">
-                    <i class="plus icon"></i>Tambah
+        <div class="thirteen wide column">
+            <form action="stok.php" class="right floated ui form">
+                <div class="inline fields">
+                    <div class="field">
+                        <label for="kategori">Filter Kategori</label>
+                        <select class="ui dropdown" name="kategori_id" required id="kategori_id">
+                            <option value="0" <?php echo isset($_GET['kategori_id']) && $_GET['kategori_id'] == 0 ? 'selected' : '' ?>>Semua Kategori</option>
+                            <?php
+                            $query = "SELECT id,nama FROM kategori ORDER BY id";
+                            $result = mysqli_query($koneksi, $query);
+                            $i = 0;
+                            while ($row = mysqli_fetch_array($result)) {
+                                $i++;
+                            ?>
+                                <option value="<?php echo $row['id'] ?>" <?php echo isset($_GET['kategori_id']) && $_GET['kategori_id'] == $row['id'] ? 'selected' : '' ?>><?php echo $row['nama'] ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <a href="tambahStok.php">
+                            <div class="ui primary labeled icon button">
+                                <i class="plus icon"></i>Tambah Stok
+                            </div>
+                        </a>
+                    </div>
                 </div>
-            </a>
+            </form>
         </div>
     </div>
 
@@ -75,11 +96,12 @@ include('header.php');
     <?php endif; ?>
     <?php unset($_SESSION['message_warning']); ?>
 
-    <table class="ui celled table">
+    <table class="ui celled table" id="myTable">
         <thead>
             <tr>
                 <th class="collapsing">No</th>
                 <th>Nama Barang</th>
+                <th>Kategori</th>
                 <th>Qty</th>
                 <th>Restock Point</th>
                 <th class="right aligned">Harga</th>
@@ -89,15 +111,25 @@ include('header.php');
         <tbody>
             <?php
             // Menampilkan list stok
-            $query = "SELECT id,nama,qty,restock_point,harga FROM stok ORDER BY id";
+            if (isset($_GET['kategori_id']) && $_GET['kategori_id'] != 0) {
+                $kategori_id = $_GET['kategori_id'];
+                $query = "SELECT id,nama,qty,restock_point,harga,kategori_id FROM stok WHERE kategori_id = '$kategori_id' ORDER BY id";
+            } else {
+                $query = "SELECT id,nama,qty,restock_point,harga,kategori_id FROM stok ORDER BY id";
+            }
             $result = mysqli_query($koneksi, $query);
             $i = 0;
             while ($row = mysqli_fetch_array($result)) {
+                $kategori_id = $row['kategori_id'];
+                $queryKategori = "SELECT nama FROM kategori WHERE id=$kategori_id LIMIT 1";
+                $resultKategori = mysqli_query($koneksi, $queryKategori);
+                $kategori = mysqli_fetch_assoc($resultKategori);
                 $i++;
             ?>
                 <tr>
                     <td><?php echo $i ?></td>
                     <td><?php echo $row['nama'] ?></td>
+                    <td><?php echo $kategori['nama'] ?></td>
                     <td><?php echo $row['qty'] ?> pcs</td>
                     <td><?php echo $row['restock_point'] ?> pcs</td>
                     <td class="right aligned">Rp <?php echo number_format($row['harga'], 0, ',', '.') ?></td>
@@ -127,9 +159,39 @@ include('header.php');
 </section>
 
 <?php include('footer.php'); ?>
+<script src="//cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+<script src="//cdn.datatables.net/plug-ins/1.11.3/sorting/currency.js"></script>
+<script src="//cdn.datatables.net/plug-ins/1.11.3/sorting/natural.js"></script>
 
 <script>
     if (window.history.replaceState) {
         window.history.replaceState(null, null, window.location.href);
     }
+
+    $(document).ready(function() {
+        $('#myTable').DataTable({
+            columnDefs: [{
+                    type: 'natural',
+                    targets: 3
+                },
+                {
+                    type: 'natural',
+                    targets: 4
+                },
+                {
+                    type: 'currency',
+                    targets: 5
+                },
+                {
+                    orderable: false,
+                    targets: 6
+                }
+            ]
+        });
+
+        $('#kategori_id').change(function() {
+            // $('#select_date').click();
+            this.form.submit();
+        });
+    });
 </script>

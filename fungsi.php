@@ -128,6 +128,18 @@ function getKriteriaPV($id_kriteria)
 	return $pv;
 }
 
+function getJumlahKategori()
+{
+	include('config.php');
+	$query  = "SELECT count(*) FROM kategori";
+	$result = mysqli_query($koneksi, $query);
+	while ($row = mysqli_fetch_array($result)) {
+		$jmlData = $row[0];
+	}
+
+	return $jmlData;
+}
+
 // mencari jumlah alternatif
 function getJumlahAlternatif()
 {
@@ -181,11 +193,11 @@ function tambahData($tabel, $nama)
 	}
 }
 
-function tambahStok($nama, $qty, $restock_point, $harga)
+function tambahStok($nama, $qty, $restock_point, $harga, $kategori_id)
 {
 	include('config.php');
 
-	$query 	= "INSERT INTO stok (nama, qty, restock_point, harga) VALUES ('$nama', '$qty', '$restock_point', $harga)";
+	$query 	= "INSERT INTO stok (nama, qty, restock_point, harga, kategori_id) VALUES ('$nama', '$qty', '$restock_point', $harga, $kategori_id)";
 	$tambah	= mysqli_query($koneksi, $query);
 
 	if (!$tambah) {
