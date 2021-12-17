@@ -27,6 +27,7 @@
 					</a>
 				</li>
 				<li><a class="item" href="orders.php">Pesanan</a></li>
+				<li><a class="item" href="restocks.php">Riwayat Restock</a></li>
 				<li>
 					<a class="item" href="kriteria.php">Kriteria
 						<div class="ui blue tiny label" style="float: right;"><?php echo getJumlahKriteria(); ?></div>

@@ -125,6 +125,7 @@ include('header.php');
 			<br>
 
 			<form action="hasil.php">
+				<input type="hidden" name="stok_id" value="<?php echo $_POST['stok_id'] ?>">
 				<button class="ui right labeled icon button" style="float: right;">
 					<i class="right arrow icon"></i>
 					Lanjut
@@ -138,7 +139,7 @@ include('header.php');
 
 		?>
 			<br>
-			<a href="<?php echo "bobot.php?c=" . ($jenis + 1) ?>">
+			<a href="<?php echo "bobot.php?c=" . ($jenis + 1) . "&id=" . $_POST['stok_id'] ?>">
 				<button class="ui right labeled icon button" style="float: right;">
 					<i class="right arrow icon"></i>
 					Lanjut

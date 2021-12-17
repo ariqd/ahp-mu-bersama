@@ -12,8 +12,18 @@ if (isset($_POST['addToCart'])) {
 if (isset($_POST['restock'])) {
     $id = $_POST['id'];
 
-    header('Location: bobot_kriteria.php');
-    exit();
+    // $query = "SELECT id FROM restocks WHERE stok_id=$id";
+    $query  = "SELECT count(*) as restock_count FROM restocks WHERE stok_id=$id";
+    $select = mysqli_query($koneksi, $query);
+    $restock_count = mysqli_fetch_array($select)['restock_count'];
+
+    // echo $restock_count;
+
+    if ($restock_count <= 0) {
+        header('Location: bobot_kriteria.php?id=' . $id);
+    } else {
+        header('Location: restock_details.php?id=' . $id);
+    }
 }
 
 // menjalankan perintah edit

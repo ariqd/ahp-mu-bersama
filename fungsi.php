@@ -590,6 +590,7 @@ function showTabelPerbandingan($jenis, $kriteria)
 ?>
 
 	<form class="ui form" action="proses.php" method="post">
+		<input type="hidden" value="<?php echo $_GET['id'] ?>" name="stok_id">
 		<table class="ui celled selectable collapsing table">
 			<thead>
 				<tr>
